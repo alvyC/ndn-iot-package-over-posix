@@ -80,7 +80,7 @@ include(${DIR_CMAKEFILES}/unittest.cmake)
 include(${DIR_CMAKEFILES}/examples.cmake)
 
 # Full Consumer
-include(${DIR_CMAKEFILES}/name.cmake)
+include(${DIR_CMAKEFILES}/psync-fconsumer.cmake)
 
 # Doxygen
 find_package(Doxygen
