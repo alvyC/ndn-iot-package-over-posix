@@ -79,6 +79,9 @@ include(${DIR_CMAKEFILES}/unittest.cmake)
 # Examples
 include(${DIR_CMAKEFILES}/examples.cmake)
 
+# Full Consumer
+include(${DIR_CMAKEFILES}/name.cmake)
+
 # Doxygen
 find_package(Doxygen
   OPTIONAL_COMPONENTS dot
