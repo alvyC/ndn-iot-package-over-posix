@@ -18,7 +18,7 @@
 
 ndn_name_t name_prefix;
 uint8_t buf[4096];
-ndn_unix_face_t *face;
+ndn_udp_face_t *face;
 bool running;
 
 int parseArgs(int argc, char *argv[]){
@@ -42,8 +42,12 @@ int on_interest(const uint8_t* interest, uint32_t interest_size, void* userdata)
 
   printf("On interest\n");
   data.name = name_prefix;
+
   ndn_data_set_content(&data, (uint8_t*)str, strlen(str) + 1);
   ndn_metainfo_init(&data.metainfo);
+  
+  ndn_metainfo_set_freshness_period(&data.metainfo, 1000);
+
   ndn_metainfo_set_content_type(&data.metainfo, NDN_CONTENT_TYPE_BLOB);
   encoder_init(&encoder, buf, 4096);
   ndn_data_tlv_encode_digest_sign(&encoder, &data);
@@ -61,11 +65,16 @@ int main(int argc, char *argv[]){
   }
 
   ndn_lite_startup();
-  face = ndn_unix_face_construct(NDN_NFD_DEFAULT_ADDR, true);
+  in_port_t multicast_port =  htons((uint16_t) 56363);
+  in_addr_t multicast_ip = inet_addr("224.0.23.170");
+  face = ndn_udp_multicast_face_construct(INADDR_ANY, multicast_ip, multicast_port);
+
+  // face = ndn_unix_face_construct(NDN_NFD_DEFAULT_ADDR, true);
 
   running = true;
   encoder_init(&encoder, buf, sizeof(buf));
   ndn_name_tlv_encode(&encoder, &name_prefix);
+
   ndn_forwarder_register_prefix(encoder.output_value, encoder.offset, on_interest, NULL);
   while(running){
     ndn_forwarder_process();
