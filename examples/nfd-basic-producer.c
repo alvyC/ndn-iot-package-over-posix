@@ -65,10 +65,10 @@ int main(int argc, char *argv[]){
   }
 
   ndn_lite_startup();
-  in_port_t multicast_port =  htons((uint16_t) 5353);
+  in_port_t remote_port =  htons((uint16_t) 5353);
   in_port_t local_port = htons((uint16_t) 5354);
   in_addr_t multicast_ip = inet_addr("127.0.0.1");
-  face = ndn_udp_unicast_face_construct(INADDR_ANY, local_port, multicast_ip, multicast_port);
+  face = ndn_udp_unicast_face_construct(INADDR_ANY, local_port, multicast_ip, remote_port);
 
   // face = ndn_unix_face_construct(NDN_NFD_DEFAULT_ADDR, true);
 
